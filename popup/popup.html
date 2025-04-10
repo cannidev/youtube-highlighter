@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+
+
+  <style>
+    :root {
+      /* Light theme */
+      --primary-color: #ff4444;
+      --background: #ffffff;
+      --surface: #f8f8f8;
+      --text-primary: #0f0f0f;
+      --border-color: #e0e0e0;
+    }
+
+    [data-theme="dark"] {
+      /* Dark theme */
+      --primary-color: #ff0000;
+      --background: #0f0f0f;
+      --surface: #272727;
+      --text-primary: #ffffff;
+      --border-color: #434343;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 100;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    body {
+      width: 280px;
+      padding: 20px;
+      margin: 0;
+      font-family: 'Roboto', Arial, sans-serif;
+      background: var(--background);
+      color: var(--text-primary);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked+.slider {
+      background-color: var(--primary-color);
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(16px);
+    }
+
+
+    .slider-container {
+      background: var(--surface);
+      padding: 1.2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .slider-value {
+      background: var(--primary-color);
+      color: white;
+      padding: 0.2rem 0.6rem;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 4px;
+      background: #434343;
+      border-radius: 4px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+    }
+
+    #save {
+      background: var(--primary-color);
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 8px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: opacity 0.2s;
+      transition: background-color 0.3s;
+    }
+
+    #save:hover {
+      opacity: 0.9;
+      cursor: pointer;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-top: 15px;
+    }
+
+    .logo {
+      width: 80px;
+      height: auto;
+      margin-bottom: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: rotate(-5deg) scale(1.05);
+    }
+
+    .support-section {
+      margin-top: auto;
+      padding-top: 1.5rem;
+      text-align: center;
+      border-top: 1px solid #434343;
+    }
+
+    .coffee-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #ffdd00;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: opacity 0.2s;
+    }
+
+    .coffee-link:hover {
+      opacity: 0.8;
+    }
+
+    .coffee-emoji {
+      font-size: 1.2rem;
+    }
+
+    .coffee-emoji {
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .coffee-link:hover .coffee-emoji {
+      transform: rotate(-15deg) scale(1.2);
+    }
+
+    .bmc-container {
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+
+    .bmc-button {
+      display: inline-flex;
+      align-items: center;
+      width: 100%;
+      padding: 7px 0px;
+      background-color: #FFDD00;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: transform 0.3s ease;
+    }
+
+    .bmc-button:hover {
+      transform: translateY(-2px);
+    }
+
+    .bmc-button img {
+      height: 24px;
+      width: 24px;
+      margin-right: 8px;
+    }
+
+    .bmc-button span {
+      color: #000000;
+      font-family: 'Cookie', cursive;
+      font-size: 1.2rem;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider-container {
+      border: 1px solid var(--border-color);
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    button#save {
+      background: var(--primary-color);
+      transition: background-color 0.3s;
+    }
+
+    .extension-title {
+      color: var(--text-primary);
+      font-size: 1.4rem;
+      margin: 0;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    /* Add to dark theme */
+    [data-theme="dark"] .extension-title {
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Add font import at top of style section */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+    /* Tooltip styles */
+    .label-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .info-icon {
+      width: 18px;
+      height: 18px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: help;
+      transition: all 0.2s ease;
+    }
+
+    .info-icon:hover {
+      transform: scale(1.1);
+      background: var(--text-primary);
+      color: var(--background);
+    }
+
+    .tooltip-text {
+      visibility: hidden;
+      width: 200px;
+      background-color: var(--surface);
+      color: var(--text-primary);
+      text-align: center;
+      border-radius: 6px;
+      padding: 8px 12px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--border-color);
+    }
+
+    .tooltip:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Add triangle pointer */
+    .tooltip-text::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: var(--surface) transparent transparent transparent;
+    }
+
+    .heart-emoji {
+      color: var(--primary-color);
+      animation: heartbeat 1.2s infinite;
+      margin-left: 4px;
+    }
+
+    @keyframes heartbeat {
+      0% {
+        transform: scale(1);
+      }
+
+      15% {
+        transform: scale(1.3);
+      }
+
+      30% {
+        transform: scale(1);
+      }
+
+      45% {
+        transform: scale(1.15);
+      }
+
+      60% {
+        transform: scale(1);
+      }
+    }
+
+    .bmc-button:hover .heart-emoji {
+      animation: heartbeat 0.8s infinite;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="theme-toggle">
+    <label class="switch">
+      <input type="checkbox" id="themeToggle">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <img src="../images/logo.png" class="logo" alt="Video Highlighter">
+      <h1 class="extension-title">Video Highlighter</h1>
+    </div>
+    <div class="slider-container">
+      <div class="slider-label">
+        <div class="label-wrapper">
+          <span>Highlight Threshold</span>
+          <div class="tooltip">
+            <div class="info-icon">i</div>
+            <span class="tooltip-text">How many times more views than nearby videos needed to trigger highlight</span>
+          </div>
+        </div>
+        <span class="slider-value" id="thresholdValue">2x</span>
+      </div>
+      <input type="range" id="threshold" min="1" max="5" step="0.1" value="2">
+    </div>
+    <div class="slider-container">
+      <div class="slider-label">
+        <div class="label-wrapper">
+          <span>Comparison Window</span>
+          <div class="tooltip">
+            <div class="info-icon">i</div>
+            <span class="tooltip-text">Number of nearby videos to compare with (before and after current video)</span>
+          </div>
+        </div>
+        <span class="slider-value" id="windowValue">5</span>
+      </div>
+      <input type="range" id="window" min="1" max="10" step="1" value="5">
+    </div>
+
+    <button id="save">Apply Settings</button>
+
+    <!-- Your existing controls -->
+
+    <div class="bmc-container">
+      <a href="https://www.buymeacoffee.com/cannidev" class="bmc-button" target="_blank" rel="noopener">
+        <img src="../images/buy-me-a-coffee.svg" alt="Coffee cup icon">
+        <span>Buy me a coffee</span> <span class="heart-emoji">❤️</span>
+      </a>
+    </div>
+  </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+
+</html>
